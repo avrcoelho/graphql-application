@@ -15,7 +15,7 @@ class FakeUserRepository implements IUserRepository {
     return findUser;
   }
 
-  public async create(userData: ICreateUserDTO): Promise<User> {
+  public async createUser(userData: ICreateUserDTO): Promise<User> {
     const user = new User();
 
     Object.assign(user, { id: uuid() }, userData);

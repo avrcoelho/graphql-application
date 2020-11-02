@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import UserRepository from './infra/typeorm/repositories/User.repository';
 import CreateUserService from './services/CreateUser.service';
 import BCryptHashProvider from './providers/hashProvider/implementations/BCryptHash.provider';
+import UserResolver from './infra/graphql/resolvers/User.resolver';
 
 @Module({
   imports: [
@@ -11,13 +12,7 @@ import BCryptHashProvider from './providers/hashProvider/implementations/BCryptH
   ],
   providers: [
     CreateUserService,
-    {
-      provide: 'HashProvider',
-      useClass: BCryptHashProvider,
-    },
-  ],
-  exports: [
-    TypeOrmModule.forFeature([UserRepository]),
+    UserResolver,
     {
       provide: 'HashProvider',
       useClass: BCryptHashProvider,

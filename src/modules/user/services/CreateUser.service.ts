@@ -28,7 +28,7 @@ class CreateUserService {
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
-    const user = await this.usersRepository.create({
+    const user = await this.usersRepository.createUser({
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
