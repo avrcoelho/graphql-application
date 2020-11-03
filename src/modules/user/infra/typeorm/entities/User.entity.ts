@@ -5,12 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 @Entity('users')
 class UserEntity {
-  @Field()
+  @Field(() => ID)
   @ObjectIdColumn()
   id: string;
 
