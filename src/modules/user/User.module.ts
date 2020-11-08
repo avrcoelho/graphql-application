@@ -7,12 +7,17 @@ import BCryptHashProvider from './providers/hashProvider/implementations/BCryptH
 import UserResolver from './infra/graphql/resolvers/User.resolver';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserRepository]),
-  ],
+  imports: [TypeOrmModule.forFeature([UserRepository])],
   providers: [
     CreateUserService,
     UserResolver,
+    {
+      provide: 'HashProvider',
+      useClass: BCryptHashProvider,
+    },
+  ],
+  exports: [
+    TypeOrmModule.forFeature([UserRepository]),
     {
       provide: 'HashProvider',
       useClass: BCryptHashProvider,

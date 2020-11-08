@@ -1,0 +1,8 @@
+{
+  "type": "mongodb",
+  "host": "localhost",
+  "port": 27017,
+  "database": "graphql_application",
+  "useUnifiedTopology": true,
+  "entities": ["./dist/modules/**/infra/typeorm/entities/*.entity{.ts,.js}"]
+}

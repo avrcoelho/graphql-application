@@ -16,16 +16,27 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type AuthResult {
+  token: String!
+  id: String!
+}
+
 type Query {
-  index: [UserEntity!]!
+  getUsers: [UserEntity!]!
 }
 
 type Mutation {
-  create(data: UserInput!): UserEntity!
+  createUser(data: UserInput!): UserEntity!
+  auth(data: AuthInput!): AuthResult!
 }
 
 input UserInput {
   name: String!
+  email: String!
+  password: String!
+}
+
+input AuthInput {
   email: String!
   password: String!
 }
