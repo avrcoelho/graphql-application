@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import UserRepository from './infra/typeorm/repositories/User.repository';
 import CreateUserService from './services/CreateUser.service';
-import GetUserService from './services/GetUser.service';
 import BCryptHashProvider from './providers/hashProvider/implementations/BCryptHash.provider';
 import UserResolver from './infra/graphql/resolvers/User.resolver';
 
@@ -11,7 +10,6 @@ import UserResolver from './infra/graphql/resolvers/User.resolver';
   imports: [TypeOrmModule.forFeature([UserRepository])],
   providers: [
     CreateUserService,
-    GetUserService,
     UserResolver,
     {
       provide: 'HashProvider',

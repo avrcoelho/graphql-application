@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, HttpModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -8,6 +8,7 @@ import AuthModule from './modules/auth/Auth.module';
 
 @Module({
   imports: [
+    HttpModule,
     UserModule,
     AuthModule,
     ConfigModule.forRoot({
