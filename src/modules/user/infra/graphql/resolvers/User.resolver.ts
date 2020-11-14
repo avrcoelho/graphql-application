@@ -28,7 +28,7 @@ export default class UserResolver {
 
   @Mutation(() => UserEntity)
   public async createUser(@Args('data') input: UserInput): Promise<UserEntity> {
-    const user = this.createUserService.execute(input);
+    const user = await this.createUserService.execute(input);
 
     return user;
   }
