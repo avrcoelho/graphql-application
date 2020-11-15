@@ -39,7 +39,7 @@ type Query {
 type Mutation {
   createUser(data: UserInput!): UserEntity!
   auth(data: AuthInput!): AuthResult!
-  createPost(data: CreatePostInput!): PostEntity!
+  createPost(file: Upload!, data: CreatePostInput!): PostEntity!
   updatePost(data: UpdatePostInput!): PostEntity!
   deletePost(id: String!): Boolean!
 }
@@ -54,6 +54,9 @@ input AuthInput {
   email: String!
   password: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreatePostInput {
   title: String!
