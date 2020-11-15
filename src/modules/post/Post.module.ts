@@ -5,7 +5,9 @@ import UserModule from '@modules/user/User.module';
 import UserRepository from './infra/typeorm/repositories/Post.repository';
 import CreatePostService from './services/CreatePost.service';
 import UpdatePostService from './services/UpdatePost.service';
+import DeletePostService from './services/DeletePost.service';
 import GetPostService from './services/GetPost.service';
+import GetUserPostsService from './services/GetUserPosts.service';
 import PostResolver from './infra/graphql/resolvers/Post.resolver';
 
 @Module({
@@ -14,6 +16,8 @@ import PostResolver from './infra/graphql/resolvers/Post.resolver';
     CreatePostService,
     UpdatePostService,
     GetPostService,
+    GetUserPostsService,
+    DeletePostService,
     PostResolver,
   ],
 })

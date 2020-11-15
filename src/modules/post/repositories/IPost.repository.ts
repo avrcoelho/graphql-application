@@ -6,4 +6,5 @@ export default interface IPostRepository {
   findByUserId(user_id: string): Promise<Post[]>;
   createPost(data: ICreatePostDTO): Promise<Post>;
   savePost(post: Post): Promise<Post>;
+  deletePost(id: string): Promise<void>;
 }

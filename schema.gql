@@ -33,7 +33,7 @@ type AuthResult {
 
 type Query {
   getUser: UserEntity!
-  getPost(id: String!): PostEntity!
+  getUserPosts(id: String!): [PostEntity!]!
 }
 
 type Mutation {
@@ -41,6 +41,7 @@ type Mutation {
   auth(data: AuthInput!): AuthResult!
   createPost(data: CreatePostInput!): PostEntity!
   updatePost(data: UpdatePostInput!): PostEntity!
+  deletePost(id: String!): Boolean!
 }
 
 input UserInput {
