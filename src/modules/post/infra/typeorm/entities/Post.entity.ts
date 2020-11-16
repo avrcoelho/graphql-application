@@ -42,6 +42,7 @@ class PostEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Field(() => UserEntity)
   @ManyToOne(
     () => UserEntity,
     user => user.posts,

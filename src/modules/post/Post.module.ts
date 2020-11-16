@@ -10,6 +10,7 @@ import DeletePostService from './services/DeletePost.service';
 import GetPostService from './services/GetPost.service';
 import GetUserPostsService from './services/GetUserPosts.service';
 import PostResolver from './infra/graphql/resolvers/Post.resolver';
+import GetPostsUserResolver from './infra/graphql/resolvers/GetPostsUser.resolver';
 
 @Module({
   imports: [UserModule, TypeOrmModule.forFeature([UserRepository])],
@@ -20,6 +21,7 @@ import PostResolver from './infra/graphql/resolvers/Post.resolver';
     GetUserPostsService,
     DeletePostService,
     PostResolver,
+    GetPostsUserResolver,
     {
       provide: 'StorageProvider',
       useClass: StorageProvider,

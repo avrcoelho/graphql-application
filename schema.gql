@@ -10,6 +10,7 @@ type PostEntity {
   image: String!
   created_at: DateTime!
   updated_at: DateTime!
+  user: UserEntity!
 }
 
 """
@@ -24,6 +25,7 @@ type UserEntity {
   password: String!
   created_at: DateTime!
   updated_at: DateTime!
+  posts: [PostEntity!]!
 }
 
 type AuthResult {
@@ -34,6 +36,7 @@ type AuthResult {
 type Query {
   getUser: UserEntity!
   getUserPosts(id: String!): [PostEntity!]!
+  getPost(id: String!): PostEntity!
 }
 
 type Mutation {

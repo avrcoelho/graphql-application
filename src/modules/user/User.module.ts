@@ -6,6 +6,7 @@ import CreateUserService from './services/CreateUser.service';
 import GetUserService from './services/GetUser.service';
 import BCryptHashProvider from './providers/hashProvider/implementations/BCryptHash.provider';
 import UserResolver from './infra/graphql/resolvers/User.resolver';
+import GetMessageUserResolver from './infra/graphql/resolvers/GetUserPost.resolver';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepository])],
@@ -13,6 +14,7 @@ import UserResolver from './infra/graphql/resolvers/User.resolver';
     CreateUserService,
     GetUserService,
     UserResolver,
+    GetMessageUserResolver,
     {
       provide: 'HashProvider',
       useClass: BCryptHashProvider,

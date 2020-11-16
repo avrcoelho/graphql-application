@@ -37,6 +37,7 @@ class UserEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Field(() => [PostEntity])
   @OneToMany(
     () => PostEntity,
     post => post.user,

@@ -41,6 +41,7 @@ export default class PostResolver {
     return post;
   }
 
+  @Query(() => PostEntity)
   public async getPost(@Args('id') id: string): Promise<PostEntity> {
     const post = await this.getPostService.execute(id);
 
