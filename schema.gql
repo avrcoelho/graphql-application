@@ -73,3 +73,9 @@ input UpdatePostInput {
   content: String!
   image: String
 }
+
+type Subscription {
+  postAdded: PostEntity!
+  postUpdated: PostEntity!
+  postDelected: String!
+}

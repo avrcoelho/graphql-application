@@ -2,6 +2,7 @@ import { UseGuards, Inject } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { GraphQLUpload } from 'apollo-server-express';
 import { FileUpload } from 'graphql-upload';
+import { PubSub } from 'graphql-subscriptions';
 
 import IStorageProvider from '@shared/providers/storageProvider/models/IStorage.provider';
 import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
@@ -19,6 +20,8 @@ import UpdatePostInput from '../inputs/UpdatePost.input';
 interface IUser {
   id: string;
 }
+
+export const pubSub = new PubSub();
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostEntity)
@@ -64,6 +67,8 @@ export default class PostResolver {
       data: { ...input, image } as ICreatePostDTO,
     });
 
+    pubSub.publish('postAdded', { postAdded: post });
+
     return post;
   }
 
@@ -73,12 +78,16 @@ export default class PostResolver {
   ): Promise<PostEntity> {
     const post = await this.updatePostService.execute(input as IUpdatePostDTO);
 
+    pubSub.publish('postUpdated', { postUpdated: post });
+
     return post;
   }
 
   @Mutation(() => Boolean)
   public async deletePost(@Args('id') id: string): Promise<boolean> {
     const deleted = await this.deletePostService.execute(id);
+
+    pubSub.publish('postDelected', { postDelected: id });
 
     return deleted;
   }
