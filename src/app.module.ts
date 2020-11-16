@@ -18,10 +18,10 @@ import PostModule from './modules/post/Post.module';
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
-      uploads: {
-        maxFileSize: 2000, // 2 MB
-        maxFiles: 1,
-      },
+      // uploads: {
+      //   maxFileSize: 200, // 2 MB
+      //   maxFiles: 1,
+      // },
     }),
     TypeOrmModule.forRoot(),
   ],

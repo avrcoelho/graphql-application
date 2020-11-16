@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import StorageProvider from '@shared/providers/storageProvider';
 import UserModule from '@modules/user/User.module';
 import UserRepository from './infra/typeorm/repositories/Post.repository';
 import CreatePostService from './services/CreatePost.service';
@@ -19,6 +20,10 @@ import PostResolver from './infra/graphql/resolvers/Post.resolver';
     GetUserPostsService,
     DeletePostService,
     PostResolver,
+    {
+      provide: 'StorageProvider',
+      useClass: StorageProvider,
+    },
   ],
 })
 export default class PostModule {}

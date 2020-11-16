@@ -1,10 +1,9 @@
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Inject } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { GraphQLUpload } from 'apollo-server-express';
 import { FileUpload } from 'graphql-upload';
-import { createWriteStream } from 'fs';
-import { resolve } from 'path';
 
+import IStorageProvider from '@shared/providers/storageProvider/models/IStorage.provider';
 import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
 import PostEntity from '../../typeorm/entities/Post.entity';
 import CreatePostService from '../../../services/CreatePost.service';
@@ -30,6 +29,9 @@ export default class PostResolver {
     private readonly deletePostService: DeletePostService,
     private readonly getPostService: GetPostService,
     private readonly getUserPostsService: GetUserPostsService,
+
+    @Inject('StorageProvider')
+    private storageProvider: IStorageProvider,
   ) {}
 
   @Query(() => [PostEntity])
@@ -50,32 +52,15 @@ export default class PostResolver {
     @Context('user') user: IUser,
     @Args('data') input: PostInput,
     @Args({ name: 'file', type: () => GraphQLUpload })
-    { createReadStream, filename }: FileUpload,
+    fileUpload: FileUpload,
   ): Promise<PostEntity> {
     const user_id = user.id;
 
-    new Promise(async () =>
-      createReadStream().pipe(
-        createWriteStream(
-          resolve(
-            __dirname,
-            '..',
-            '..',
-            '..',
-            '..',
-            '..',
-            '..',
-            'tmp',
-            'images',
-            filename,
-          ),
-        ),
-      ),
-    );
+    const image = await this.storageProvider.saveFile(fileUpload);
 
     const post = await this.createPostService.execute({
       user_id,
-      data: { ...input, image: filename } as ICreatePostDTO,
+      data: { ...input, image } as ICreatePostDTO,
     });
 
     return post;
