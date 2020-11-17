@@ -75,7 +75,7 @@ input UpdatePostInput {
 }
 
 type Subscription {
-  postAdded: PostEntity!
-  postUpdated: PostEntity!
-  postDelected: String!
+  postAdded(user_id: String!): PostEntity!
+  postUpdated(user_id: String!): PostEntity!
+  postDelected(user_id: String!): String!
 }
