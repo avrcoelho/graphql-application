@@ -7,7 +7,7 @@ type PostEntity {
   user_id: ID!
   title: String!
   content: String!
-  image: String!
+  image: String
   created_at: DateTime!
   updated_at: DateTime!
   user: UserEntity!
@@ -77,5 +77,5 @@ input UpdatePostInput {
 type Subscription {
   postAdded(user_id: String!): PostEntity!
   postUpdated(user_id: String!): PostEntity!
-  postDelected(user_id: String!): String!
+  postDelected(user_id: String!): PostEntity!
 }

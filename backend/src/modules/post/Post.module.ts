@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PubSub } from 'graphql-subscriptions';
 
 import StorageProvider from '@shared/providers/storageProvider';
 import UserModule from '@modules/user/User.module';
@@ -27,6 +28,10 @@ import PostSubscriptionsResolver from './infra/graphql/resolvers/PostSubscriptio
     {
       provide: 'StorageProvider',
       useClass: StorageProvider,
+    },
+    {
+      provide: 'PubSub',
+      useValue: new PubSub(),
     },
   ],
 })

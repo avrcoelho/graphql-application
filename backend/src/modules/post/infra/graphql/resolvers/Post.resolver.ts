@@ -21,8 +21,6 @@ interface IUser {
   id: string;
 }
 
-export const pubSub = new PubSub();
-
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostEntity)
 export default class PostResolver {
@@ -35,6 +33,9 @@ export default class PostResolver {
 
     @Inject('StorageProvider')
     private storageProvider: IStorageProvider,
+
+    @Inject('PubSub')
+    private pubSub: PubSub,
   ) {}
 
   @Query(() => [PostEntity])
@@ -67,7 +68,7 @@ export default class PostResolver {
       data: { ...input, image } as ICreatePostDTO,
     });
 
-    pubSub.publish('postAdded', { postAdded: post });
+    this.pubSub.publish('postAdded', { postAdded: post });
 
     return post;
   }
@@ -78,17 +79,17 @@ export default class PostResolver {
   ): Promise<PostEntity> {
     const post = await this.updatePostService.execute(input as IUpdatePostDTO);
 
-    pubSub.publish('postUpdated', { postUpdated: post });
+    this.pubSub.publish('postUpdated', { postUpdated: post });
 
     return post;
   }
 
   @Mutation(() => Boolean)
   public async deletePost(@Args('id') id: string): Promise<boolean> {
-    const deleted = await this.deletePostService.execute(id);
+    const post = await this.deletePostService.execute(id);
 
-    pubSub.publish('postDelected', { postDelected: id });
+    this.pubSub.publish('postDelected', { postDelected: post });
 
-    return deleted;
+    return true;
   }
 }
