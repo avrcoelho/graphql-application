@@ -2,7 +2,7 @@ import { useRef, useCallback, useEffect } from 'react';
 import { Grid, Flex, Link, Button, Text, useToast } from '@chakra-ui/react';
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
-import { FormHandles, useField } from '@unform/core';
+import { FormHandles } from '@unform/core';
 
 import { useSignIn } from '@/hooks/useSignIn';
 import { useValidateForm } from '@/hooks/useValidateForm';
