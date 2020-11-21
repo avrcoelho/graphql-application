@@ -8,7 +8,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Expose } from 'class-transformer';
 
 import UserEntity from '@modules/user/infra/typeorm/entities/User.entity';
 
