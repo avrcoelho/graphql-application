@@ -31,7 +31,7 @@ export const useSignIn = () => {
 
   const payload = useMemo(() => {
     return { signIn, loading, error };
-  }, [signIn, data, loading, error]);
+  }, [signIn, loading, error]);
 
   return payload;
 };

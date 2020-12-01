@@ -12,24 +12,37 @@ import {
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
+import { gql } from '@apollo/client';
 
-import { useSignIn } from '@/hooks/useSignIn';
+import { useMutation } from '@/hooks/useMutation';
 import { useValidateForm } from '@/hooks/useValidateForm';
-import { SessionVariables } from '@/types/session';
+import { SignUpData } from '@/types/mutationsData';
+import { SignUpVariables } from '@/types/mutationsVariables';
 
 import Input from '@/components/Input';
 
-export default function Home() {
+const MUTATION = gql`
+  mutation SignUp($name: String!, $email: String!, $password: String!) {
+    createUser(data: { name: $name, email: $email, password: $password }) {
+      id
+    }
+  }
+`;
+
+export default function SignUp() {
   const formRef = useRef<FormHandles>(null);
 
-  const { signIn, loading, error } = useSignIn();
+  const { mutation, loading, error, data } = useMutation<
+    SignUpData,
+    SignUpVariables
+  >(MUTATION);
   const toast = useToast();
 
   useEffect(() => {
     if (error) {
       toast({
-        title: 'Erro ao acessar conta',
-        description: 'E-mail ou senha inválidos',
+        title: 'Erro ao criar conta',
+        description: error.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -37,18 +50,35 @@ export default function Home() {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (data) {
+      formRef.current.reset();
+
+      toast({
+        title: 'Conta criada com sucesso',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [data]);
+
   const schema = Yup.object().shape({
+    name: Yup.string().required('Campo obrigatório'),
     email: Yup.string().email('E-mail inválido').required('Campo obrigatório'),
     password: Yup.string().required('Campo obrigatório'),
+    passwordConfirmation: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Senhas não conferem')
+      .required('Campo obrigatório'),
   });
 
-  const onSuccess = useCallback(async (formData: SessionVariables): Promise<
+  const onSuccess = useCallback(async (formData: SignUpVariables): Promise<
     void
   > => {
-    signIn({ variables: formData });
+    mutation({ variables: formData });
   }, []);
 
-  const { handleSubmit } = useValidateForm<SessionVariables>({
+  const { handleSubmit } = useValidateForm<SignUpVariables>({
     formRef,
     schema,
     onSuccess,
@@ -77,17 +107,27 @@ export default function Home() {
         padding={16}
       >
         <Heading as="h1" fontSize={28} textAlign="center" marginBottom={8}>
-          Acessar conta
+          Criar conta
         </Heading>
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Input
-            name="email"
+            name="name"
+            height="50px"
+            backgroundColor="gray.800"
+            focusBorderColor="purple.500"
+            fontSize="sm"
+            placeholder="Nome"
+          />
+
+          <Input
             type="email"
+            name="email"
             height="50px"
             backgroundColor="gray.800"
             focusBorderColor="purple.500"
             fontSize="sm"
             placeholder="E-mail"
+            marginTop={2}
           />
 
           <Input
@@ -98,6 +138,17 @@ export default function Home() {
             focusBorderColor="purple.500"
             fontSize="sm"
             placeholder="Senha"
+            marginTop={2}
+          />
+
+          <Input
+            name="passwordConfirmation"
+            type="password"
+            height="50px"
+            backgroundColor="gray.800"
+            focusBorderColor="purple.500"
+            fontSize="sm"
+            placeholder="Confirmar senha"
             marginTop={2}
           />
 
@@ -113,13 +164,12 @@ export default function Home() {
               backgroundColor: 'purple.600',
             }}
           >
-            {loading ? '...' : 'Entrar'}
+            {loading ? '...' : 'Criar'}
           </Button>
         </Form>
 
         <Text textAlign="center" fontSize="sm" color="gray.300" marginTop={6}>
-          Não tem uma conta?{' '}
-          <NextLink href="/signup">
+          <NextLink href="/">
             <Link
               alignSelf="flex-start"
               marginTop={1}
@@ -130,7 +180,7 @@ export default function Home() {
                 color: 'purple.500',
               }}
             >
-              Crie uma
+              Acessar conta
             </Link>
           </NextLink>
         </Text>

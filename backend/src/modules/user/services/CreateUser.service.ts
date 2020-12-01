@@ -23,7 +23,7 @@ class CreateUserService {
     );
 
     if (checkUserExists) {
-      throw new BadRequestException('E-mail address already registered');
+      throw new BadRequestException('E-mail já cadastrado');
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password);
