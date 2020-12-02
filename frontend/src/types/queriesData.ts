@@ -4,6 +4,7 @@ export interface Post {
   content: string;
   user_id: string;
   image?: string;
+  image_url?: string;
 }
 
 export interface UserPostsData {

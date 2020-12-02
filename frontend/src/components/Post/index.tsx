@@ -21,13 +21,7 @@ export default function Post(post: PostProps) {
         <PostActions />
       </Flex>
 
-      {post.image && (
-        <Image
-          src={`${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${post.image}`}
-          width={300}
-          marginY={6}
-        />
-      )}
+      {post.image_url && <Image src={post.image_url} width={300} marginY={6} />}
 
       <Text fontSize={14}>{post.content}</Text>
     </Box>

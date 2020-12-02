@@ -14,6 +14,7 @@ const QUERY = gql`
       title
       content
       image
+      image_url
       user_id
     }
   }

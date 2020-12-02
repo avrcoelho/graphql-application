@@ -53,6 +53,11 @@ class PostEntity {
   )
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
+
+  @Field(() => String, { nullable: true })
+  get image_url() {
+    return this.image ? `${process.env.APP_API_URL}/files/${this.image}` : null;
+  }
 }
 
 export default PostEntity;

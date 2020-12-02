@@ -11,6 +11,7 @@ type PostEntity {
   created_at: DateTime!
   updated_at: DateTime!
   user: UserEntity!
+  image_url: String
 }
 
 """
