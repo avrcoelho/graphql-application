@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
-import { Grid, Flex, Box, useToast, Heading, Text } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import { Grid, Flex, useToast, Heading, Text } from '@chakra-ui/react';
 import { gql } from '@apollo/client';
 
 import { useQuery } from '@/hooks/useQuery';
-import { UserPostData } from '@/types/queriesData';
+import { UserPostsData } from '@/types/queriesData';
+import Post from '@/components/Post';
+import ButtonAddPost from '@/components/ButtonAddPost';
 
 const QUERY = gql`
   query Posts {
@@ -18,7 +20,7 @@ const QUERY = gql`
 `;
 
 export default function Posts() {
-  const { data, loading, error } = useQuery<UserPostData>(QUERY);
+  const { data, loading, error } = useQuery<UserPostsData>(QUERY);
   const toast = useToast();
 
   useEffect(() => {
@@ -34,49 +36,39 @@ export default function Posts() {
   }, [error]);
 
   return (
-    <Grid
-      as="main"
-      height="100vh"
-      templateColumns="1fr 780px 1fr"
-      templateAreas="
+    <>
+      <Grid
+        as="main"
+        height="100vh"
+        templateColumns="1fr 780px 1fr"
+        templateAreas="
         '. container .'
       "
-      justifyContent="center"
-    >
-      <Flex
-        gridArea="container"
-        borderRadius="md"
-        flexDir="column"
-        alignItems="stretch"
-        padding={16}
+        justifyContent="center"
       >
-        <Heading as="h1" fontSize={28} textAlign="center" marginBottom={8}>
-          Postagens
-        </Heading>
-        {data?.getUserPosts.map(post => (
-          <Box
-            key={post.id}
-            as="article"
-            borderRadius={4}
-            border="solid 1px #232b3c"
-            paddingX={6}
-            paddingY={4}
-            marginBottom={8}
-          >
-            <Heading as="h3" fontSize={18}>
-              {post.title}
-            </Heading>
+        <Flex
+          gridArea="container"
+          borderRadius="md"
+          flexDir="column"
+          alignItems="stretch"
+          padding={16}
+        >
+          <Heading as="h1" fontSize={28} textAlign="center" marginBottom={8}>
+            Postagens
+          </Heading>
+          {data?.getUserPosts.map(post => (
+            <Post key={post.id} {...post} />
+          ))}
 
-            <Text fontSize={14}>{post.content}</Text>
-          </Box>
-        ))}
+          {loading && (
+            <Text marginX="auto" textAlign="center">
+              Carregando...
+            </Text>
+          )}
+        </Flex>
+      </Grid>
 
-        {loading && (
-          <Text marginX="auto" textAlign="center">
-            Carregando...
-          </Text>
-        )}
-      </Flex>
-    </Grid>
+      <ButtonAddPost />
+    </>
   );
 }

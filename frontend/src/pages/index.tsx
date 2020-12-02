@@ -112,8 +112,9 @@ export default function Home() {
             _hover={{
               backgroundColor: 'purple.600',
             }}
+            isLoading={loading}
           >
-            {loading ? '...' : 'Entrar'}
+            Entrar
           </Button>
         </Form>
 

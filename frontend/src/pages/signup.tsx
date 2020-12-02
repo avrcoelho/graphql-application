@@ -12,7 +12,7 @@ import {
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
-import { gql } from '@apollo/client';
+import { ApolloCache, gql } from '@apollo/client';
 
 import { useMutation } from '@/hooks/useMutation';
 import { useValidateForm } from '@/hooks/useValidateForm';
@@ -31,6 +31,12 @@ const MUTATION = gql`
 
 export default function SignUp() {
   const formRef = useRef<FormHandles>(null);
+
+  // const mutationUpdate = useCallback((cache: ApolloCache<any>, { data: { addItem } }) => {
+  //   const data = cache.readQuery({ query: MUTATION });
+  //   data.items = [...data.items, addItem];
+  //   cache.writeQuery({ query: MUTATION }, data);
+  // }, []);
 
   const { mutation, loading, error, data } = useMutation<
     SignUpData,
@@ -163,8 +169,9 @@ export default function SignUp() {
             _hover={{
               backgroundColor: 'purple.600',
             }}
+            isLoading={loading}
           >
-            {loading ? '...' : 'Criar'}
+            Criar
           </Button>
         </Form>
 
