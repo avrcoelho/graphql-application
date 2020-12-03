@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Grid, Flex, useToast, Heading, Text } from '@chakra-ui/react';
 import { gql } from '@apollo/client';
 
@@ -6,6 +6,10 @@ import { useQuery } from '@/hooks/useQuery';
 import { UserPostsData } from '@/types/queriesData';
 import Post from '@/components/Post';
 import ButtonAddPost from '@/components/ButtonAddPost';
+import AlertConfirmation, {
+  AlertConfirmationHandles,
+} from '@/components/AlertConfirmation';
+import { useDeletePost } from '@/hooks/context/useDeletePost';
 
 const QUERY = gql`
   query Posts {
@@ -21,8 +25,11 @@ const QUERY = gql`
 `;
 
 export default function Posts() {
+  const alertConfirmationRef = useRef<AlertConfirmationHandles>(null);
+
   const { data, loading, error } = useQuery<UserPostsData>(QUERY);
   const toast = useToast();
+  const { deleteFn } = useDeletePost();
 
   useEffect(() => {
     if (error) {
@@ -35,6 +42,14 @@ export default function Posts() {
       });
     }
   }, [error]);
+
+  const handleDelete = useCallback(() => {
+    alertConfirmationRef.current.handleToggole();
+  }, []);
+
+  useEffect(() => {
+    deleteFn(handleDelete);
+  }, [deleteFn]);
 
   return (
     <>
@@ -70,6 +85,8 @@ export default function Posts() {
       </Grid>
 
       <ButtonAddPost />
+
+      <AlertConfirmation ref={alertConfirmationRef} />
     </>
   );
 }

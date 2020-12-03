@@ -18,7 +18,7 @@ export default function Post(post: PostProps) {
           {post.title}
         </Heading>
 
-        <PostActions />
+        <PostActions postId={post.id} />
       </Flex>
 
       {post.image_url && <Image src={post.image_url} width={300} marginY={6} />}
