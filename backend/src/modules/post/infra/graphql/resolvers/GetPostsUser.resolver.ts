@@ -12,8 +12,8 @@ export default class GetPostsUserResolver {
   constructor(private readonly getUserPostsService: GetUserPostsService) {}
 
   @ResolveField(() => [PostEntity])
-  public async posts(@Parent() parent: UserEntity): Promise<PostEntity[]> {
-    const posts = await this.getUserPostsService.execute(parent.id);
+  public async posts(@Parent() user: UserEntity): Promise<PostEntity[]> {
+    const posts = await this.getUserPostsService.execute(user.id);
 
     return posts;
   }

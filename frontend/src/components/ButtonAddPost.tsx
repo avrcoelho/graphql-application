@@ -1,7 +1,7 @@
-import { Button } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 
-export default function ButtonAddPost() {
+export default function ButtonAddPost(props: ButtonProps) {
   return (
     <Button
       position="fixed"
@@ -14,6 +14,7 @@ export default function ButtonAddPost() {
       _hover={{
         backgroundColor: 'purple.600',
       }}
+      {...props}
     >
       <AddIcon />
     </Button>

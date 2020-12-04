@@ -7,11 +7,11 @@ import { DeletePostProvider } from '@/hooks/context/useDeletePost';
 function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={client}>
-      <DeletePostProvider>
-        <ThemeContainer>
+      <ThemeContainer>
+        <DeletePostProvider>
           <Component {...pageProps} />
-        </ThemeContainer>
-      </DeletePostProvider>
+        </DeletePostProvider>
+      </ThemeContainer>
     </ApolloProvider>
   );
 }

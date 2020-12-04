@@ -18,6 +18,7 @@ class PostRepository extends MongoRepository<Post> implements IPostRepository {
       where: {
         user_id: new ObjectId(user_id),
       },
+      order: { created_at: 'DESC' },
     });
 
     return post;

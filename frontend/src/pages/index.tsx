@@ -15,7 +15,7 @@ import { FormHandles } from '@unform/core';
 
 import { useSignIn } from '@/hooks/useSignIn';
 import { useValidateForm } from '@/hooks/useValidateForm';
-import { SessionVariables } from '@/types/session';
+import { SessionVariables } from '@/types/mutationsVariables';
 
 import Input from '@/components/Input';
 

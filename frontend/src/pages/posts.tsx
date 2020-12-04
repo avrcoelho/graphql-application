@@ -1,35 +1,30 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Grid, Flex, useToast, Heading, Text } from '@chakra-ui/react';
-import { gql } from '@apollo/client';
 
-import { useQuery } from '@/hooks/useQuery';
-import { UserPostsData } from '@/types/queriesData';
 import Post from '@/components/Post';
 import ButtonAddPost from '@/components/ButtonAddPost';
 import AlertConfirmation, {
   AlertConfirmationHandles,
 } from '@/components/AlertConfirmation';
+import ModalInsertPost, {
+  ModalInsertPostHandles,
+} from '@/components/ModalInsertPost';
+
+import { useQuery } from '@/hooks/useQuery';
 import { useDeletePost } from '@/hooks/context/useDeletePost';
 
-const QUERY = gql`
-  query Posts {
-    getUserPosts(id: "5fa0a34e8464d50798ef407f") {
-      id
-      title
-      content
-      image
-      image_url
-      user_id
-    }
-  }
-`;
+import { UserPostsData } from '@/types/queriesData';
+import { QUERY_GET_USER_POSTS } from '@/contants/graphqlQueries';
 
 export default function Posts() {
   const alertConfirmationRef = useRef<AlertConfirmationHandles>(null);
+  const modalInsertPostRef = useRef<ModalInsertPostHandles>(null);
 
-  const { data, loading, error } = useQuery<UserPostsData>(QUERY);
+  const { data, loading, error } = useQuery<UserPostsData>(
+    QUERY_GET_USER_POSTS,
+  );
   const toast = useToast();
-  const { deleteFn } = useDeletePost();
+  const { setOpenAlertConfirmation } = useDeletePost();
 
   useEffect(() => {
     if (error) {
@@ -47,9 +42,13 @@ export default function Posts() {
     alertConfirmationRef.current.handleToggole();
   }, []);
 
+  const handleInsertPost = useCallback(() => {
+    modalInsertPostRef.current.handleOpen();
+  }, []);
+
   useEffect(() => {
-    deleteFn(handleDelete);
-  }, [deleteFn]);
+    setOpenAlertConfirmation(handleDelete);
+  }, [setOpenAlertConfirmation]);
 
   return (
     <>
@@ -84,9 +83,11 @@ export default function Posts() {
         </Flex>
       </Grid>
 
-      <ButtonAddPost />
+      <ButtonAddPost onClick={handleInsertPost} />
 
       <AlertConfirmation ref={alertConfirmationRef} />
+
+      <ModalInsertPost ref={modalInsertPostRef} />
     </>
   );
 }

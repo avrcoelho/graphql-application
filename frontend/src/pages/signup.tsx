@@ -12,7 +12,6 @@ import {
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
-import { ApolloCache, gql } from '@apollo/client';
 
 import { useMutation } from '@/hooks/useMutation';
 import { useValidateForm } from '@/hooks/useValidateForm';
@@ -20,28 +19,15 @@ import { SignUpData } from '@/types/mutationsData';
 import { SignUpVariables } from '@/types/mutationsVariables';
 
 import Input from '@/components/Input';
-
-const MUTATION = gql`
-  mutation SignUp($name: String!, $email: String!, $password: String!) {
-    createUser(data: { name: $name, email: $email, password: $password }) {
-      id
-    }
-  }
-`;
+import { MUTATION_CREATE_USER } from '@/contants/graphqlMutations';
 
 export default function SignUp() {
   const formRef = useRef<FormHandles>(null);
 
-  // const mutationUpdate = useCallback((cache: ApolloCache<any>, { data: { addItem } }) => {
-  //   const data = cache.readQuery({ query: MUTATION });
-  //   data.items = [...data.items, addItem];
-  //   cache.writeQuery({ query: MUTATION }, data);
-  // }, []);
-
   const { mutation, loading, error, data } = useMutation<
     SignUpData,
     SignUpVariables
-  >(MUTATION);
+  >({ query: MUTATION_CREATE_USER });
   const toast = useToast();
 
   useEffect(() => {

@@ -1,23 +1,17 @@
 import { useMemo, useEffect } from 'react';
-import { useMutation, gql } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-import { SessionData, SessionVariables } from '@/types/session';
+import { SessionData } from '@/types/mutationsData';
+import { SessionVariables } from '@/types/mutationsVariables';
+import { MUTATION_SIGNIN } from '@/contants/graphqlMutations';
 
-const SIGNIN = gql`
-  mutation SignIn($email: String!, $password: String!) {
-    auth(data: { email: $email, password: $password }) {
-      id
-      token
-    }
-  }
-`;
+import { useMutation } from './useMutation';
 
 export const useSignIn = () => {
-  const [signIn, { data, loading, error }] = useMutation<
+  const { mutation: signIn, data, loading, error } = useMutation<
     SessionData,
     SessionVariables
-  >(SIGNIN, { onError: error => error });
+  >({ query: MUTATION_SIGNIN });
 
   const router = useRouter();
 

@@ -1,18 +1,16 @@
 import { useMemo } from 'react';
-import {
-  MutationUpdaterFn,
-  useMutation as useMutationApollo,
-} from '@apollo/client';
-import { DocumentNode } from 'graphql';
+import { useMutation as useMutationApollo } from '@apollo/client';
 
-export const useMutation = <Data = any, Variables = any>(
-  MUTATION: DocumentNode,
-  update?: MutationUpdaterFn,
-) => {
+import { MutationData } from '@/types/mutationsData';
+
+export const useMutation = <Data = any, Variables = any>({
+  query,
+  update,
+}: MutationData) => {
   const [mutation, { data, loading, error }] = useMutationApollo<
     Data,
     Variables
-  >(MUTATION, {
+  >(query, {
     onError: error => error,
     update,
   });

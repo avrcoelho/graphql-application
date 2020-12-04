@@ -56,16 +56,16 @@ export default class PostResolver {
   public async createPost(
     @Context('user') user: IUser,
     @Args('data') input: PostInput,
-    @Args({ name: 'file', type: () => GraphQLUpload })
-    fileUpload: FileUpload,
+    // @Args({ name: 'file', type: () => GraphQLUpload })
+    // fileUpload: FileUpload,
   ): Promise<PostEntity> {
     const user_id = user.id;
 
-    const image = await this.storageProvider.saveFile(fileUpload);
+    // const image = await this.storageProvider.saveFile(fileUpload);
 
     const post = await this.createPostService.execute({
       user_id,
-      data: { ...input, image } as ICreatePostDTO,
+      data: { ...input, image: null } as ICreatePostDTO,
     });
 
     this.pubSub.publish('postAdded', { postAdded: post });

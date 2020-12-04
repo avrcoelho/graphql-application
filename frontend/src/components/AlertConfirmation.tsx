@@ -16,25 +16,31 @@ import {
   AlertDialogOverlay,
 } from '@chakra-ui/react';
 
-interface Props {
-  id: string;
-}
+import { useDeletePost } from '@/hooks/context/useDeletePost';
 
 export interface AlertConfirmationHandles {
   handleToggole: () => void;
 }
 
 const AlertConfirmation: ForwardRefRenderFunction<AlertConfirmationHandles> = (
-  props,
+  _,
   ref,
 ) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const cancelRef = useRef();
 
+  const { deleteConfirmed } = useDeletePost();
+
   const handleToggole = useCallback(() => {
     setIsOpen(prevState => !prevState);
   }, []);
+
+  const handleDelete = useCallback(() => {
+    deleteConfirmed();
+
+    setIsOpen(prevState => !prevState);
+  }, [deleteConfirmed]);
 
   useImperativeHandle(ref, () => {
     return {
@@ -62,7 +68,14 @@ const AlertConfirmation: ForwardRefRenderFunction<AlertConfirmationHandles> = (
             <Button ref={cancelRef} onClick={handleToggole}>
               Cancelar
             </Button>
-            <Button colorScheme="red" onClick={handleToggole} ml={3}>
+            <Button
+              backgroundColor="red.500"
+              _hover={{
+                backgroundColor: 'red.600',
+              }}
+              onClick={handleDelete}
+              ml={3}
+            >
               Confirmar
             </Button>
           </AlertDialogFooter>
