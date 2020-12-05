@@ -19,7 +19,7 @@ import { SignUpData } from '@/types/mutationsData';
 import { SignUpVariables } from '@/types/mutationsVariables';
 
 import Input from '@/components/Input';
-import { MUTATION_CREATE_USER } from '@/contants/graphqlMutations';
+import { MUTATION_CREATE_USER } from '@/libs/queriesGraphql/graphqlMutations';
 
 export default function SignUp() {
   const formRef = useRef<FormHandles>(null);

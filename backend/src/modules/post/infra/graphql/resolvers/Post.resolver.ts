@@ -1,5 +1,5 @@
 import { UseGuards, Inject } from '@nestjs/common';
-import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query, Context, ID } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
@@ -9,7 +9,6 @@ import GetPostService from '../../../services/GetPost.service';
 import GetUserPostsService from '../../../services/GetUserPosts.service';
 import PostInput from '../inputs/CreatePost.input';
 import ICreatePostDTO from '../../../dtos/ICreatePost.dto';
-import IUpdatePostDTO from '../../../dtos/IUpdatePost.dto';
 import UpdatePostService from '../../../services/UpdatePost.service';
 import DeletePostService from '../../../services/DeletePost.service';
 import UpdatePostInput from '../inputs/UpdatePost.input';
@@ -33,14 +32,18 @@ export default class PostResolver {
   ) {}
 
   @Query(() => [PostEntity])
-  public async getUserPosts(@Args('id') id: string): Promise<PostEntity[]> {
+  public async getUserPosts(
+    @Args({ name: 'id', type: () => ID }) id: string,
+  ): Promise<PostEntity[]> {
     const post = await this.getUserPostsService.execute(id);
 
     return post;
   }
 
   @Query(() => PostEntity)
-  public async getPost(@Args('id') id: string): Promise<PostEntity> {
+  public async getPost(
+    @Args({ name: 'id', type: () => ID }) id: string,
+  ): Promise<PostEntity> {
     const post = await this.getPostService.execute(id);
 
     return post;
@@ -66,7 +69,7 @@ export default class PostResolver {
   @Mutation(() => PostEntity)
   public async updatePost(
     @Args('data') input: UpdatePostInput,
-    @Args({ name: 'id', type: () => String }) id: string,
+    @Args({ name: 'id', type: () => ID }) id: string,
   ): Promise<PostEntity> {
     const post = await this.updatePostService.execute({ data: input, id });
 
@@ -76,7 +79,9 @@ export default class PostResolver {
   }
 
   @Mutation(() => Boolean)
-  public async deletePost(@Args('id') id: string): Promise<boolean> {
+  public async deletePost(
+    @Args({ name: 'id', type: () => ID }) id: string,
+  ): Promise<boolean> {
     const post = await this.deletePostService.execute(id);
 
     this.pubSub.publish('postDelected', { postDelected: post });

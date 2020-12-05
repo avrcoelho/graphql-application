@@ -1,3 +1,5 @@
+import { DocumentNode } from '@apollo/client';
+
 export interface Post {
   id: string;
   title: string;
@@ -13,4 +15,9 @@ export interface UserPostsData {
 
 export interface GetPostsData {
   getPost: Post[];
+}
+
+export interface QueryData<Ivariables> {
+  query: DocumentNode;
+  variables?: Ivariables;
 }

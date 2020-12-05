@@ -18,7 +18,6 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { ApolloCache } from '@apollo/client';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -27,11 +26,9 @@ import { useValidateForm } from '@/hooks/useValidateForm';
 import { useMutation } from '@/hooks/useMutation';
 
 import { CreatePostVariables } from '@/types/mutationsVariables';
-import { CreatePostData } from '@/types/mutationsData';
-import { Post, UserPostsData } from '@/types/queriesData';
+import { Post } from '@/types/queriesData';
 
-import { MUTATION_CREATE_POST } from '@/contants/graphqlMutations';
-import { QUERY_GET_USER_POSTS } from '@/contants/graphqlQueries';
+import { MUTATION_CREATE_POST } from '@/libs/queriesGraphql/graphqlMutations';
 
 import Input from '@/components/Input';
 import TextArea from '@/components/TextArea';
@@ -51,28 +48,11 @@ const ModalInsertPost: ForwardRefRenderFunction<ModalInsertPostHandles> = (
   const finalRef = useRef();
   const formRef = useRef<FormHandles>(null);
 
-  const updateCache = useCallback(
-    (cache: ApolloCache<unknown>, { data: responseData }: CreatePostData) => {
-      const cacheData = cache.readQuery<UserPostsData>({
-        query: QUERY_GET_USER_POSTS,
-      });
-
-      cache.writeQuery({
-        query: QUERY_GET_USER_POSTS,
-        data: {
-          getUserPosts: [responseData.createPost, ...cacheData.getUserPosts],
-        },
-      });
-    },
-    [],
-  );
-
   const { mutation, data, loading, error } = useMutation<
     Post,
     CreatePostVariables
   >({
     query: MUTATION_CREATE_POST,
-    update: updateCache,
   });
 
   useEffect(() => {

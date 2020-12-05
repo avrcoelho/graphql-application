@@ -14,23 +14,31 @@ import ModalUpdatePost, {
 } from '@/components/ModalUpdatePost';
 
 import { useQuery } from '@/hooks/useQuery';
+import { useSignIn } from '@/hooks/useSignIn';
+import { useListenSubscription } from '@/hooks/useListenSubscription';
 import { useDeletePost } from '@/hooks/context/useDeletePost';
 import { useUpdatePost } from '@/hooks/context/useUpdatePost';
 
 import { UserPostsData } from '@/types/queriesData';
-import { QUERY_GET_USER_POSTS } from '@/contants/graphqlQueries';
+import { GetPostVariables } from '@/types/queriesVariables';
+
+import { QUERY_GET_USER_POSTS } from '@/libs/queriesGraphql/graphqlQueries';
 
 export default function Posts() {
   const alertConfirmationRef = useRef<AlertConfirmationHandles>(null);
   const modalUpdatePostRef = useRef<ModalUpdatePostHandles>(null);
   const modalInsertPostRef = useRef<ModalInsertPostHandles>(null);
 
-  const { data, loading, error } = useQuery<UserPostsData>(
-    QUERY_GET_USER_POSTS,
-  );
+  const { getUserId } = useSignIn();
+
+  const { data, loading, error } = useQuery<UserPostsData, GetPostVariables>({
+    query: QUERY_GET_USER_POSTS,
+    variables: { id: getUserId() },
+  });
   const toast = useToast();
   const { setOpenAlertConfirmation } = useDeletePost();
   const { setOpenUpdateModal } = useUpdatePost();
+  useListenSubscription(getUserId());
 
   useEffect(() => {
     if (error) {

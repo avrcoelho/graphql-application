@@ -16,17 +16,17 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from '@chakra-ui/react';
-import { ApolloCache } from '@apollo/client';
+
 import { useToast } from '@chakra-ui/react';
 
-import { QUERY_GET_USER_POSTS } from '@/contants/graphqlQueries';
-import { MUTATION_DELETE_POST } from '@/contants/graphqlMutations';
-import { useMutation } from '@/hooks/useMutation';
-import { DeletePostData as DeletePostDataMutation } from '@/types/mutationsData';
-import { UserPostsData } from '@/types/queriesData';
-import { DeletePostVariables } from '@/types/mutationsVariables';
+import { MUTATION_DELETE_POST } from '@/libs/queriesGraphql/graphqlMutations';
 
+import { useMutation } from '@/hooks/useMutation';
 import { useDeletePost } from '@/hooks/context/useDeletePost';
+
+import { DeletePostData as DeletePostDataMutation } from '@/types/mutationsData';
+
+import { DeletePostVariables } from '@/types/mutationsVariables';
 
 export interface AlertConfirmationHandles {
   handleToggole: () => void;
@@ -42,28 +42,10 @@ const AlertConfirmation: ForwardRefRenderFunction<AlertConfirmationHandles> = (
 
   const { postId, setPostId } = useDeletePost();
 
-  const updateCache = useCallback(
-    (cache: ApolloCache<unknown>) => {
-      const data = cache.readQuery<UserPostsData>({
-        query: QUERY_GET_USER_POSTS,
-      });
-
-      const newPosts = data.getUserPosts.filter(({ id }) => id !== postId);
-
-      cache.writeQuery({
-        query: QUERY_GET_USER_POSTS,
-        data: {
-          getUserPosts: newPosts,
-        },
-      });
-    },
-    [postId],
-  );
-
   const { mutation, error, data } = useMutation<
     DeletePostDataMutation,
     DeletePostVariables
-  >({ query: MUTATION_DELETE_POST, update: updateCache });
+  >({ query: MUTATION_DELETE_POST });
 
   const toast = useToast();
 

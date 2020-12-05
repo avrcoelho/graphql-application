@@ -36,16 +36,16 @@ type AuthResult {
 
 type Query {
   getUser: UserEntity!
-  getUserPosts(id: String!): [PostEntity!]!
-  getPost(id: String!): PostEntity!
+  getUserPosts(id: ID!): [PostEntity!]!
+  getPost(id: ID!): PostEntity!
 }
 
 type Mutation {
   createUser(data: UserInput!): UserEntity!
   auth(data: AuthInput!): AuthResult!
   createPost(data: CreatePostInput!): PostEntity!
-  updatePost(id: String!, data: UpdatePostInput!): PostEntity!
-  deletePost(id: String!): Boolean!
+  updatePost(id: ID!, data: UpdatePostInput!): PostEntity!
+  deletePost(id: ID!): Boolean!
 }
 
 input UserInput {
@@ -72,7 +72,7 @@ input UpdatePostInput {
 }
 
 type Subscription {
-  postAdded(user_id: String!): PostEntity!
-  postUpdated(user_id: String!): PostEntity!
-  postDelected(user_id: String!): PostEntity!
+  postAdded(user_id: ID!): PostEntity!
+  postUpdated(user_id: ID!): PostEntity!
+  postDelected(user_id: ID!): PostEntity!
 }

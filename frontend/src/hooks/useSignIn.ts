@@ -1,9 +1,9 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 
 import { SessionData } from '@/types/mutationsData';
 import { SessionVariables } from '@/types/mutationsVariables';
-import { MUTATION_SIGNIN } from '@/contants/graphqlMutations';
+import { MUTATION_SIGNIN } from '@/libs/queriesGraphql/graphqlMutations';
 
 import { useMutation } from './useMutation';
 
@@ -21,11 +21,24 @@ export const useSignIn = () => {
 
       router.push('/posts');
     }
-  }, [data]);
+  }, [data, router]);
+
+  const getUserId = useCallback(() => {
+    const userData =
+      typeof window !== 'undefined' && localStorage.getItem('userData');
+
+    if (userData) {
+      const id = JSON.parse(userData).auth.id;
+
+      return id;
+    }
+
+    return '';
+  }, []);
 
   const payload = useMemo(() => {
-    return { signIn, loading, error };
-  }, [signIn, loading, error]);
+    return { signIn, loading, error, getUserId };
+  }, [signIn, loading, error, getUserId]);
 
   return payload;
 };

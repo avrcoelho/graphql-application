@@ -18,25 +18,21 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { ApolloCache, useLazyQuery } from '@apollo/client';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 
 import { useValidateForm } from '@/hooks/useValidateForm';
 import { useMutation } from '@/hooks/useMutation';
+import { useLazyQuery } from '@/hooks/useLazyQuery';
 import { useUpdatePost } from '@/hooks/context/useUpdatePost';
 
 import { UpdatePostVariables } from '@/types/mutationsVariables';
 import { GetPostVariables } from '@/types/queriesVariables';
-import { UpdatePostData } from '@/types/mutationsData';
-import { Post, UserPostsData, GetPostsData } from '@/types/queriesData';
+import { Post, GetPostsData } from '@/types/queriesData';
 
-import { MUTATION_UPDATE_POST } from '@/contants/graphqlMutations';
-import {
-  QUERY_GET_USER_POSTS,
-  QUERY_GET_POST,
-} from '@/contants/graphqlQueries';
+import { MUTATION_UPDATE_POST } from '@/libs/queriesGraphql/graphqlMutations';
+import { QUERY_GET_POST } from '@/libs/queriesGraphql/graphqlQueries';
 
 import Input from '@/components/Input';
 import TextArea from '@/components/TextArea';
@@ -57,28 +53,10 @@ const ModalUpdatePost: ForwardRefRenderFunction<ModalUpdatePostHandles> = (
   const finalRef = useRef();
   const formRef = useRef<FormHandles>(null);
 
-  const updateCache = useCallback(
-    (cache: ApolloCache<unknown>, { data: responseData }: UpdatePostData) => {
-      const cacheData = cache.readQuery<UserPostsData>({
-        query: QUERY_GET_USER_POSTS,
-      });
-
-      cache.writeQuery({
-        query: QUERY_GET_USER_POSTS,
-        data: {
-          getUserPosts: cacheData.getUserPosts.map(post =>
-            post.id === postId ? { ...responseData.updatePost } : post,
-          ),
-        },
-      });
-    },
-    [postId],
-  );
-
-  const [getPost, { loading, data: postData }] = useLazyQuery<
+  const { getData: getPost, loading, data: postData } = useLazyQuery<
     GetPostsData,
     GetPostVariables
-  >(QUERY_GET_POST);
+  >({ query: QUERY_GET_POST });
 
   const {
     mutation,
@@ -87,7 +65,6 @@ const ModalUpdatePost: ForwardRefRenderFunction<ModalUpdatePostHandles> = (
     error: errorMutation,
   } = useMutation<Post, UpdatePostVariables>({
     query: MUTATION_UPDATE_POST,
-    update: updateCache,
   });
 
   useEffect(() => {
