@@ -39,7 +39,7 @@ export const MUTATION_SIGNIN = gql`
 
 export const MUTATION_UPDATE_POST = gql`
   mutation Update($id: String!, $title: String!, $content: String!) {
-    updatePost(data: { id: $id, title: $title, content: $content }) {
+    updatePost(id: $id, data: { title: $title, content: $content }) {
       content
       title
       id

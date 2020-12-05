@@ -5,7 +5,11 @@ import IPostRepository from '../repositories/IPost.repository';
 import PostRepository from '../infra/typeorm/repositories/Post.repository';
 import Post from '../infra/typeorm/entities/Post.entity';
 import IUpdatePostDTO from '../dtos/IUpdatePost.dto';
-import { ObjectId } from 'mongodb';
+
+interface IRequest {
+  data: IUpdatePostDTO;
+  id: string;
+}
 
 @Injectable()
 class UpdatePostService {
@@ -14,14 +18,14 @@ class UpdatePostService {
     private postsRepository: IPostRepository,
   ) {}
 
-  async execute(data: IUpdatePostDTO): Promise<Post> {
-    const post = await this.postsRepository.findById(data.id);
+  async execute({ data, id }: IRequest): Promise<Post> {
+    const post = await this.postsRepository.findById(id);
 
     if (!post) {
       throw new NotFoundException('Post not found');
     }
 
-    Object.assign(post, { ...data, id: post.id });
+    Object.assign(post, { ...data });
 
     await this.postsRepository.savePost(post);
 

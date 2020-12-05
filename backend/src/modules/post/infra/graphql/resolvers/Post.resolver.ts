@@ -1,10 +1,7 @@
 import { UseGuards, Inject } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
-import { GraphQLUpload } from 'apollo-server-express';
-import { FileUpload } from 'graphql-upload';
 import { PubSub } from 'graphql-subscriptions';
 
-import IStorageProvider from '@shared/providers/storageProvider/models/IStorage.provider';
 import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
 import PostEntity from '../../typeorm/entities/Post.entity';
 import CreatePostService from '../../../services/CreatePost.service';
@@ -31,9 +28,6 @@ export default class PostResolver {
     private readonly getPostService: GetPostService,
     private readonly getUserPostsService: GetUserPostsService,
 
-    @Inject('StorageProvider')
-    private storageProvider: IStorageProvider,
-
     @Inject('PubSub')
     private pubSub: PubSub,
   ) {}
@@ -56,12 +50,8 @@ export default class PostResolver {
   public async createPost(
     @Context('user') user: IUser,
     @Args('data') input: PostInput,
-    // @Args({ name: 'file', type: () => GraphQLUpload })
-    // fileUpload: FileUpload,
   ): Promise<PostEntity> {
     const user_id = user.id;
-
-    // const image = await this.storageProvider.saveFile(fileUpload);
 
     const post = await this.createPostService.execute({
       user_id,
@@ -76,8 +66,9 @@ export default class PostResolver {
   @Mutation(() => PostEntity)
   public async updatePost(
     @Args('data') input: UpdatePostInput,
+    @Args({ name: 'id', type: () => String }) id: string,
   ): Promise<PostEntity> {
-    const post = await this.updatePostService.execute(input as IUpdatePostDTO);
+    const post = await this.updatePostService.execute({ data: input, id });
 
     this.pubSub.publish('postUpdated', { postUpdated: post });
 
