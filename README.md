@@ -1,8 +1,11 @@
-# GraphQl Application
+# GraphQL Application
 
 ## Front-end
 
 - React
+- Typescript
+- hooks
+- Context API
 - Next.js
 - Chakra UI
 - Apollo Client
@@ -13,6 +16,7 @@
 ## Backend-end
 
 - Node.js
+- Typescript
 - Nest.js
 - JWT
 - Apollo Server
