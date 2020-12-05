@@ -32,3 +32,9 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+tmp/*
+!tmp/.gitkeep
+!tmp/uploads
+tmp/uploads/*
+!tmp/uploads/.gitkeep
