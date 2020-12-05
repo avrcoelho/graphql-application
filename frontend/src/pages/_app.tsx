@@ -2,15 +2,15 @@ import { ApolloProvider } from '@apollo/client';
 
 import ThemeContainer from '@/contexts/theme/ThemeContainer';
 import client from '@/libs/apollo-client';
-import { DeletePostProvider } from '@/hooks/context/useDeletePost';
+import ContextProvider from '@/hooks/context';
 
 function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={client}>
       <ThemeContainer>
-        <DeletePostProvider>
+        <ContextProvider>
           <Component {...pageProps} />
-        </DeletePostProvider>
+        </ContextProvider>
       </ThemeContainer>
     </ApolloProvider>
   );

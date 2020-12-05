@@ -17,3 +17,9 @@ export interface CreatePostVariables {
   title: string;
   content: string;
 }
+
+export interface UpdatePostVariables {
+  id?: string;
+  title: string;
+  content: string;
+}

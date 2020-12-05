@@ -1,8 +1,8 @@
-import { useCallback } from 'react';
 import { Box, Button } from '@chakra-ui/react';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 
 import { useDeletePost } from '@/hooks/context/useDeletePost';
+import { useUpdatePost } from '@/hooks/context/useUpdatePost';
 
 interface Props {
   postId: string;
@@ -10,11 +10,12 @@ interface Props {
 
 export default function PostActions({ postId }: Props) {
   const { handleDelete } = useDeletePost();
+  const { handleUpdate } = useUpdatePost();
 
   return (
     <>
       <Box>
-        <Button marginRight={2}>
+        <Button marginRight={2} onClick={() => handleUpdate(postId)}>
           <EditIcon />
         </Button>
         <Button

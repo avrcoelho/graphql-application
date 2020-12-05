@@ -12,3 +12,15 @@ export const QUERY_GET_USER_POSTS = gql`
     }
   }
 `;
+
+export const QUERY_GET_POST = gql`
+  query Post($id: String!) {
+    getPost(id: $id) {
+      id
+      title
+      content
+      user_id
+      image
+    }
+  }
+`;

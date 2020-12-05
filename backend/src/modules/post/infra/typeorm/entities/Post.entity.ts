@@ -35,11 +35,11 @@ class PostEntity {
   image: string | null;
 
   @Field()
-  @CreateDateColumn()
+  @CreateDateColumn({ update: false })
   created_at: Date;
 
   @Field()
-  @UpdateDateColumn()
+  @UpdateDateColumn({ insert: false })
   updated_at: Date;
 
   @Field(() => UserEntity)

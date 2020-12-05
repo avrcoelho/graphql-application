@@ -26,6 +26,10 @@ export interface CreatePostData {
   data: { createPost: Post };
 }
 
+export interface UpdatePostData {
+  data: { updatePost: Post };
+}
+
 export interface MutationData {
   query: DocumentNode;
   update?: MutationUpdaterFn;

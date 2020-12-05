@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   forwardRef,
   ForwardRefRenderFunction,
+  useEffect,
 } from 'react';
 import {
   Button,
@@ -15,6 +16,15 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from '@chakra-ui/react';
+import { ApolloCache } from '@apollo/client';
+import { useToast } from '@chakra-ui/react';
+
+import { QUERY_GET_USER_POSTS } from '@/contants/graphqlQueries';
+import { MUTATION_DELETE_POST } from '@/contants/graphqlMutations';
+import { useMutation } from '@/hooks/useMutation';
+import { DeletePostData as DeletePostDataMutation } from '@/types/mutationsData';
+import { UserPostsData } from '@/types/queriesData';
+import { DeletePostVariables } from '@/types/mutationsVariables';
 
 import { useDeletePost } from '@/hooks/context/useDeletePost';
 
@@ -30,17 +40,68 @@ const AlertConfirmation: ForwardRefRenderFunction<AlertConfirmationHandles> = (
 
   const cancelRef = useRef();
 
-  const { deleteConfirmed } = useDeletePost();
+  const { postId, setPostId } = useDeletePost();
+
+  const updateCache = useCallback(
+    (cache: ApolloCache<unknown>) => {
+      const data = cache.readQuery<UserPostsData>({
+        query: QUERY_GET_USER_POSTS,
+      });
+
+      const newPosts = data.getUserPosts.filter(({ id }) => id !== postId);
+
+      cache.writeQuery({
+        query: QUERY_GET_USER_POSTS,
+        data: {
+          getUserPosts: newPosts,
+        },
+      });
+    },
+    [postId],
+  );
+
+  const { mutation, error, data } = useMutation<
+    DeletePostDataMutation,
+    DeletePostVariables
+  >({ query: MUTATION_DELETE_POST, update: updateCache });
+
+  const toast = useToast();
+
+  useEffect(() => {
+    if (data) {
+      toast({
+        title: 'Postagem excluída',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setPostId(null);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: 'Erro ao excluir postagem',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setPostId(null);
+    }
+  }, [error]);
 
   const handleToggole = useCallback(() => {
     setIsOpen(prevState => !prevState);
   }, []);
 
   const handleDelete = useCallback(() => {
-    deleteConfirmed();
+    mutation({ variables: { id: postId } });
 
     setIsOpen(prevState => !prevState);
-  }, [deleteConfirmed]);
+  }, [mutation, postId]);
 
   useImperativeHandle(ref, () => {
     return {

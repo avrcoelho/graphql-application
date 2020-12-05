@@ -5,6 +5,7 @@ import IPostRepository from '../repositories/IPost.repository';
 import PostRepository from '../infra/typeorm/repositories/Post.repository';
 import Post from '../infra/typeorm/entities/Post.entity';
 import IUpdatePostDTO from '../dtos/IUpdatePost.dto';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 class UpdatePostService {
@@ -20,9 +21,9 @@ class UpdatePostService {
       throw new NotFoundException('Post not found');
     }
 
-    Object.assign(post, data);
+    Object.assign(post, { ...data, id: post.id });
 
-    await this.postsRepository.createPost(post);
+    await this.postsRepository.savePost(post);
 
     return post;
   }

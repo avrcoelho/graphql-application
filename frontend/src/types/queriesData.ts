@@ -10,3 +10,7 @@ export interface Post {
 export interface UserPostsData {
   getUserPosts: Post[];
 }
+
+export interface GetPostsData {
+  getPost: Post[];
+}

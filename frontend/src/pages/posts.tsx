@@ -9,15 +9,20 @@ import AlertConfirmation, {
 import ModalInsertPost, {
   ModalInsertPostHandles,
 } from '@/components/ModalInsertPost';
+import ModalUpdatePost, {
+  ModalUpdatePostHandles,
+} from '@/components/ModalUpdatePost';
 
 import { useQuery } from '@/hooks/useQuery';
 import { useDeletePost } from '@/hooks/context/useDeletePost';
+import { useUpdatePost } from '@/hooks/context/useUpdatePost';
 
 import { UserPostsData } from '@/types/queriesData';
 import { QUERY_GET_USER_POSTS } from '@/contants/graphqlQueries';
 
 export default function Posts() {
   const alertConfirmationRef = useRef<AlertConfirmationHandles>(null);
+  const modalUpdatePostRef = useRef<ModalUpdatePostHandles>(null);
   const modalInsertPostRef = useRef<ModalInsertPostHandles>(null);
 
   const { data, loading, error } = useQuery<UserPostsData>(
@@ -25,6 +30,7 @@ export default function Posts() {
   );
   const toast = useToast();
   const { setOpenAlertConfirmation } = useDeletePost();
+  const { setOpenUpdateModal } = useUpdatePost();
 
   useEffect(() => {
     if (error) {
@@ -42,12 +48,18 @@ export default function Posts() {
     alertConfirmationRef.current.handleToggole();
   }, []);
 
+  const handleUpdate = useCallback(() => {
+    modalUpdatePostRef.current.handleOpen();
+  }, []);
+
   const handleInsertPost = useCallback(() => {
     modalInsertPostRef.current.handleOpen();
   }, []);
 
   useEffect(() => {
     setOpenAlertConfirmation(handleDelete);
+
+    setOpenUpdateModal(handleUpdate);
   }, [setOpenAlertConfirmation]);
 
   return (
@@ -88,6 +100,8 @@ export default function Posts() {
       <AlertConfirmation ref={alertConfirmationRef} />
 
       <ModalInsertPost ref={modalInsertPostRef} />
+
+      <ModalUpdatePost ref={modalUpdatePostRef} />
     </>
   );
 }
