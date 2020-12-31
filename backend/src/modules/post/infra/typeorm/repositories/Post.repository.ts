@@ -16,7 +16,7 @@ class PostRepository extends MongoRepository<Post> implements IPostRepository {
   async findByUserId(user_id: string): Promise<Post[]> {
     const post = await this.find({
       where: {
-        user_id: new ObjectId(user_id),
+        user_id,
       },
       order: { created_at: 'DESC' },
     });

@@ -30,7 +30,7 @@ class CreatePostService {
       throw new NotFoundException('User not found');
     }
 
-    data.user = user;
+    data.user_id = user_id;
 
     const post = await this.postsRepository.createPost(data);
 

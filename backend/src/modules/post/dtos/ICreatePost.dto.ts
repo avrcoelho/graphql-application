@@ -1,7 +1,5 @@
-import UserEntity from '@modules/user/infra/typeorm/entities/User.entity';
-
 export default interface ICreatePostDTO {
-  user: UserEntity;
+  user_id: string;
   title: string;
   content: string;
   image?: string;
