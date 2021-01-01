@@ -7,11 +7,10 @@ import PostEntity from '../../typeorm/entities/Post.entity';
 import CreatePostService from '../../../services/CreatePost.service';
 import GetPostService from '../../../services/GetPost.service';
 import GetUserPostsService from '../../../services/GetUserPosts.service';
-import PostInput from '../inputs/CreatePost.input';
+import PostDTO from '../dtos/Post.dto';
 import ICreatePostDTO from '../../../dtos/ICreatePost.dto';
 import UpdatePostService from '../../../services/UpdatePost.service';
 import DeletePostService from '../../../services/DeletePost.service';
-import UpdatePostInput from '../inputs/UpdatePost.input';
 
 interface IUser {
   id: string;
@@ -52,7 +51,7 @@ export default class PostResolver {
   @Mutation(() => PostEntity)
   public async createPost(
     @Context('user') user: IUser,
-    @Args('data') input: PostInput,
+    @Args('data') input: PostDTO,
   ): Promise<PostEntity> {
     const user_id = user.id;
 
@@ -68,7 +67,7 @@ export default class PostResolver {
 
   @Mutation(() => PostEntity)
   public async updatePost(
-    @Args('data') input: UpdatePostInput,
+    @Args('data') input: PostDTO,
     @Args({ name: 'id', type: () => ID }) id: string,
   ): Promise<PostEntity> {
     const post = await this.updatePostService.execute({ data: input, id });

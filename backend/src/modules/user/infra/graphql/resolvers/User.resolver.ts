@@ -5,7 +5,7 @@ import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
 import UserEntity from '../../typeorm/entities/User.entity';
 import CreateUserService from '../../../services/CreateUser.service';
 import GetUserService from '../../../services/GetUser.service';
-import UserInput from '../inputs/User.input';
+import UserDTO from '../dtos/User.dto';
 
 interface IUser {
   id: string;
@@ -27,7 +27,7 @@ export default class UserResolver {
   }
 
   @Mutation(() => UserEntity)
-  public async createUser(@Args('data') input: UserInput): Promise<UserEntity> {
+  public async createUser(@Args('data') input: UserDTO): Promise<UserEntity> {
     const user = await this.createUserService.execute(input);
 
     return user;
