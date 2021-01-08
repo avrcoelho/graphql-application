@@ -10,9 +10,9 @@ import UpdatePostService from './services/UpdatePost.service';
 import DeletePostService from './services/DeletePost.service';
 import GetPostService from './services/GetPost.service';
 import GetUserPostsService from './services/GetUserPosts.service';
-import PostResolver from './infra/graphql/resolvers/Post.resolver';
-import GetPostsUserResolver from './infra/graphql/resolvers/GetPostsUser.resolver';
-import PostSubscriptionsResolver from './infra/graphql/resolvers/PostSubscriptions.resolver';
+import PostResolver from './infra/http/graphql/resolvers/Post.resolver';
+import GetPostsUserResolver from './infra/http/graphql/resolvers/GetPostsUser.resolver';
+import PostSubscriptionsResolver from './infra/http/graphql/resolvers/PostSubscriptions.resolver';
 
 @Module({
   imports: [UserModule, TypeOrmModule.forFeature([UserRepository])],

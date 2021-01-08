@@ -3,8 +3,8 @@ import { Resolver, ResolveField, Parent } from '@nestjs/graphql';
 
 import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
 import UserEntity from '@modules/user/infra/typeorm/entities/User.entity';
-import GetUserPostsService from '../../../services/GetUserPosts.service';
-import PostEntity from '../../typeorm/entities/Post.entity';
+import GetUserPostsService from '../../../../services/GetUserPosts.service';
+import PostEntity from '../../../typeorm/entities/Post.entity';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => UserEntity)

@@ -3,14 +3,14 @@ import { Args, Mutation, Resolver, Query, Context, ID } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
-import PostEntity from '../../typeorm/entities/Post.entity';
-import CreatePostService from '../../../services/CreatePost.service';
-import GetPostService from '../../../services/GetPost.service';
-import GetUserPostsService from '../../../services/GetUserPosts.service';
+import PostEntity from '../../../typeorm/entities/Post.entity';
+import CreatePostService from '../../../../services/CreatePost.service';
+import GetPostService from '../../../../services/GetPost.service';
+import GetUserPostsService from '../../../../services/GetUserPosts.service';
 import PostDTO from '../dtos/Post.dto';
-import ICreatePostDTO from '../../../dtos/ICreatePost.dto';
-import UpdatePostService from '../../../services/UpdatePost.service';
-import DeletePostService from '../../../services/DeletePost.service';
+import ICreatePostDTO from '../../../../dtos/ICreatePost.dto';
+import UpdatePostService from '../../../../services/UpdatePost.service';
+import DeletePostService from '../../../../services/DeletePost.service';
 
 interface IUser {
   id: string;

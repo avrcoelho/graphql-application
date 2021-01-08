@@ -3,7 +3,7 @@ import { Args, Resolver, Subscription, ID } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import UserEntity from '@modules/user/infra/typeorm/entities/User.entity';
-import PostEntity from '../../typeorm/entities/Post.entity';
+import PostEntity from '../../../typeorm/entities/Post.entity';
 
 @Resolver(() => UserEntity)
 export default class GetPostsUserResolver {

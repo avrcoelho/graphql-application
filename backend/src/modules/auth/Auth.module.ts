@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from '@config/jwt';
 import UserModule from '@modules/user/User.module';
 import AuthService from './services/Auth.service';
-import AuthResolver from './infra/graphql/resolvers/Auth.resolver';
+import AuthResolver from './infra/http/graphql/resolvers/Auth.resolver';
 import JwtStrategy from './strategies/jwt.strategy';
 
 @Module({

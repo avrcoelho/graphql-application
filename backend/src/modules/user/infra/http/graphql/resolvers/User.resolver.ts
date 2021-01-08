@@ -2,9 +2,9 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 
 import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
-import UserEntity from '../../typeorm/entities/User.entity';
-import CreateUserService from '../../../services/CreateUser.service';
-import GetUserService from '../../../services/GetUser.service';
+import UserEntity from '../../../typeorm/entities/User.entity';
+import CreateUserService from '../../../../services/CreateUser.service';
+import GetUserService from '../../../../services/GetUser.service';
 import UserDTO from '../dtos/User.dto';
 
 interface IUser {
