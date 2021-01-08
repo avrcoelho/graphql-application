@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import express from 'express';
 
-import { HttpExceptionFilter } from '@shared/infra/graphql/filters/HttpException.filter';
+import { HttpExceptionFilter } from '@shared/infra/http/filters/HttpException.filter';
 import uploadConfig from '@config/upload';
 import { AppModule } from './app.module';
 

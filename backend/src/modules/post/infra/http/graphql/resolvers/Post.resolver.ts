@@ -2,7 +2,7 @@ import { UseGuards, Inject } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context, ID } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
-import JwtAuthGuard from '@shared/infra/graphql/guards/jwt-auth.guard';
+import JwtAuthGuard from '@shared/infra/http/guards/jwt-auth.guard';
 import PostEntity from '../../../typeorm/entities/Post.entity';
 import CreatePostService from '../../../../services/CreatePost.service';
 import GetPostService from '../../../../services/GetPost.service';
